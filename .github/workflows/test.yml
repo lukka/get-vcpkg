@@ -1,0 +1,43 @@
+name: 'build-test'
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 1 * * SUN'
+  workflow_dispatch:
+
+jobs:
+  functional_tests:
+    name: '${{ matrix.os }}: functional tests'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+    - name: checkout the get-vcpkg action
+      uses: actions/checkout@v2
+
+    - uses: actions/checkout@v2
+      with:
+        repository: microsoft/vcpkg
+        path: vcpkg
+
+    - name: basic test for get-vcpkg with implicit vcpkg path
+      uses: ./
+
+    - name: basic test for get-vcpkg with explicit vcpkg path
+      uses: ./
+      with:
+        vpkg_root_path: ${{ github.workspace }}/vcpkg
+
+    - name: basic test for get-vcpkg with explicit vcpkg path
+      uses: ./
+      with:
+        vpkg_root_path: ${{ github.workspace }}/vcpkg
+
+    - name: basic test for get-vcpkg with appended cache key
+      uses: ./
+      with:
+        appended_cache_key: appended
