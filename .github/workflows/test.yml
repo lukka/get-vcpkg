@@ -1,4 +1,4 @@
-name: 'build-test'
+name: 'test'
 
 on:
   push:
@@ -8,36 +8,50 @@ on:
   workflow_dispatch:
 
 jobs:
+  defaults:
+    run:
+      shell: bash
+
   functional_tests:
     name: '${{ matrix.os }}: functional tests'
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest] #//??, macos-latest, windows-latest]
     steps:
-    - name: checkout the get-vcpkg action
-      uses: actions/checkout@v2
+    # Install CMake 3.21 and Ninja
+    - uses: lukka/get-cmake@v3.21.1
 
+    # vcpkg repo must be downloaded, this is a way of doing it. Another would be to set it as a submodule of this repository.
     - uses: actions/checkout@v2
       with:
         repository: microsoft/vcpkg
         path: vcpkg
 
+    - uses: lukka/get-vcpkg/.github/workflows/cache-vcpkg.yml@main
+      with:
+        vcpkg_root_path: ${{ github.workspace }}/__tests__/assets/ 
+
     - name: basic test for get-vcpkg with implicit vcpkg path
-      uses: ./
+      run: |
+        cd ${{ github.workspace }}/__tests__/assets/ && cmake --preset=ninja-multi-vcpkg -S . -B ./build -DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake &&
+        cmake --build --preset=default ./build
 
     - name: basic test for get-vcpkg with explicit vcpkg path
       uses: ./
       with:
-        vpkg_root_path: ${{ github.workspace }}/vcpkg
-
-    - name: basic test for get-vcpkg with explicit vcpkg path
-      uses: ./
-      with:
-        vpkg_root_path: ${{ github.workspace }}/vcpkg
+        vpkg_root_path: ${{ github.workspace }}/vcpkg_copy
+        vcpkgjson_path: ${{ github.workspace }}/__tests__/assets/vcpkg.json
+        build_command: >
+          cd ${{ github.workspace }}/__tests__/assets/ && cmake --preset=ninja-multi-vcpkg -S . -B ./build -DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake &&
+          cmake --build --preset=default ./build
 
     - name: basic test for get-vcpkg with appended cache key
       uses: ./
       with:
+        vcpkgjson_path: ${{ github.workspace }}/__tests__/assets/vcpkg.json
         appended_cache_key: appended
+        build_command: >
+          cd ${{ github.workspace }}/__tests__/assets/ && cmake --preset=ninja-multi-vcpkg -S . -B ./build -DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake &&
+          cmake --build --preset=default ./build

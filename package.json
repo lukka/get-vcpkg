@@ -1,0 +1,41 @@
+{
+  "name": "get-vcpkg",
+  "version": "0.0.1",
+  "description": "GitHub action for getting vcpkg.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lukka/get-vcpkg-cmake-action"
+  },
+  "author": "Luca Cappa (https://github.com/lukka)",
+  "license": "MIT",
+  "scripts": {
+    "pack": "gulp && ncc build build/src/cmake-action.js -o dist",
+    "clean": "rm -rf ./build",
+    "build": "gulp build",
+    "lint": "gulp eslint",
+    "test": "npm run pack && gulp test"
+  },
+  "devDependencies": {
+    "@types/node": "^11.9.3",
+    "jest": "^26.4.2",
+    "jest-circus": "^26.4.2",
+    "minimist": ">=1.2.2",
+    "ts-jest": "^26.3.0",
+    "ts-node": "^8.5.4",
+    "typescript": "^4.0.3"
+  },
+  "dependencies": {
+    "@actions/core": "^1.4.0",
+    "@actions/exec": "^1.1.0",
+    "@actions/github": "^5.0.0",
+    "@actions/io": "1.1.1",
+    "@actions/cache": "1.0.7",
+    "@types/jest": "^26.0.14",
+    "adm-zip": "^0.4.13",
+    "follow-redirects": "^1.9.0",
+    "jest-cli": "^26.4.2",
+    "lodash.template": ">=4.5.0",
+    "strip-json-comments": "^3.0.1",
+    "using-statement": "^0.3.1"
+  }
+}
