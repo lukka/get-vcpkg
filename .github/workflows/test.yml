@@ -24,7 +24,7 @@ jobs:
     - uses: lukka/get-cmake@v3.21.1
 
     # vcpkg repo must be downloaded, this is a way of doing it. Another would be to set it as a submodule of this repository.
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         repository: microsoft/vcpkg
         path: vcpkg
