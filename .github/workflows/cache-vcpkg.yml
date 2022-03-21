@@ -61,7 +61,7 @@ jobs:
               core.setOutput("cache_key", cacheKey);
               core.setOutput("vcpkg_root", process.env['VCPKG_ROOT']);
 
-        - uses: actions/cache@v2
+        - uses: actions/cache@v3
           name: Restore from cache, or setup cache post action.
           with:
             # The first path is the location of vcpkg (it contains the vcpkg executable and data files).
