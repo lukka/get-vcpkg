@@ -35,7 +35,7 @@ jobs:
           shell: bash
           run: |
             echo "VCPKG_COMMITID=$(git -C $INPUT_VCPKG_ROOT_PATH rev-parse --short HEAD)" >> $GITHUB_ENV
-        - uses: actions/github-script@v5
+        - uses: actions/github-script@v6.3.0
           id: set-outputs
           name: Set cache key.
           with:
