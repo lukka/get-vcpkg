@@ -21,7 +21,7 @@ jobs:
         os: [ubuntu-latest] #//??, macos-latest, windows-latest]
     steps:
     # Install CMake 3.21 and Ninja
-    - uses: lukka/get-cmake@v3.21.1
+    - uses: lukka/get-cmake@v3.26.1
 
     # vcpkg repo must be downloaded, this is a way of doing it. Another would be to set it as a submodule of this repository.
     - uses: actions/checkout@v2
